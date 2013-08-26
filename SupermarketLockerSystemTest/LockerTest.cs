@@ -1,4 +1,5 @@
-﻿using SupermarketLockerSystem;
+﻿using System;
+using SupermarketLockerSystem;
 using Xunit;
 
 namespace SupermarketLockerSystemTest
@@ -12,6 +13,16 @@ namespace SupermarketLockerSystemTest
             var locker = new Locker();
             Ticket ticket = locker.Store(bag);
             Assert.NotNull(ticket);
+        }
+
+        [Fact]
+        public void should_not_store_another_bag_when_locker_is_stored()
+        {
+            var bag = new Bag();
+            var anotherBag = new Bag();
+            var locker = new Locker();
+            locker.Store(bag);
+            Assert.Throws<InvalidOperationException>(() => locker.Store(anotherBag));
         }
     }
 }
