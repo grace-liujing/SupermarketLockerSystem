@@ -4,17 +4,18 @@ namespace SupermarketLockerSystem
 {
     public class Locker
     {
-        private Bag _bag;
-        private Ticket _ticket;
+        private Tuple<Ticket, Bag> _storedBag;
         public Ticket Store(Bag bag)
         {
-            if (_bag == null && _ticket == null)
-            {
-                _bag = bag;
-                _ticket = new Ticket();
-                return _ticket;
-            }
-            throw new InvalidOperationException();
+            if (_storedBag != null) throw new InvalidOperationException();
+            var ticket = new Ticket();
+            _storedBag = new Tuple<Ticket, Bag>(ticket, bag);
+            return ticket;
+        }
+
+        public Bag Pick(Ticket ticket)
+        {
+            return _storedBag.Item2;
         }
     }
 }
