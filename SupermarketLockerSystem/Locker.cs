@@ -15,6 +15,7 @@ namespace SupermarketLockerSystem
 
         public Bag Pick(Ticket ticket)
         {
+            if (ticket == null) throw new ArgumentNullException();
             return _storedBag.Item2;
         }
     }

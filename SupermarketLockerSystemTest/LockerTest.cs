@@ -43,14 +43,24 @@ namespace SupermarketLockerSystemTest
         }
 
         [Fact]
-        public void should_pick_the_bag_when_use_right_ticket()
+        public void should_pick_the_bag_from_locker_when_use_right_ticket()
         {
             var bag = new Bag();
             var locker = new Locker();
-            Ticket ticket=locker.Store(bag);
+            Ticket ticket = locker.Store(bag);
             Bag pickBag = locker.Pick(ticket);
 
             Assert.Equal(bag,pickBag);
+        }
+
+        [Fact]
+        public void should_not_pick_the_bag_from_locker_when_null_ticket_is_provided()
+        {
+            var bag = new Bag();
+            var locker = new Locker();
+            locker.Store(bag);
+
+            Assert.Throws<ArgumentNullException>(() => locker.Pick(null));
         }
     }
 }
