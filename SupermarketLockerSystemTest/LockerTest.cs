@@ -24,5 +24,22 @@ namespace SupermarketLockerSystemTest
             locker.Store(bag);
             Assert.Throws<InvalidOperationException>(() => locker.Store(anotherBag));
         }
+
+        [Fact] 
+        public void should_get_ticket_when_store_nothing()
+        {
+            var locker = new Locker();
+            Ticket ticket=locker.Store(null);
+            Assert.NotNull(ticket);
+        }
+
+        [Fact]
+        public void should_not_store_another_bag_when_nothing_is_stored_in_locker()
+        {
+            var bag = new Bag();
+            var locker = new Locker();
+            locker.Store(null);
+            Assert.Throws<InvalidOperationException>(() => locker.Store(bag));
+        }
     }
 }
