@@ -68,5 +68,13 @@ namespace SupermarketLockerSystemTest
 
             Assert.Throws<InvalidOperationException>(() => _locker.Pick(ticket));
         }
+
+        [Fact]
+        public void should_not_pick_the_bag_from_locker_before_storing_the_bag()
+        {
+            var ticket = new Ticket();
+
+            Assert.Throws<InvalidOperationException>(() => _locker.Pick(ticket));
+        }
     }
 }

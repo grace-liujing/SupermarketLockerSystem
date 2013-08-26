@@ -5,6 +5,7 @@ namespace SupermarketLockerSystem
     public class Locker
     {
         private Tuple<Ticket, Bag> _storedBag;
+
         public Ticket Store(Bag bag)
         {
             if (_storedBag != null) throw new InvalidOperationException();
@@ -16,6 +17,8 @@ namespace SupermarketLockerSystem
         public Bag Pick(Ticket ticket)
         {
             if (ticket == null) throw new ArgumentNullException();
+            if (_storedBag == null) throw new InvalidOperationException();
+            
             Ticket dispatchedTicket = _storedBag.Item1;
             if (dispatchedTicket.Equals(ticket))
             {
