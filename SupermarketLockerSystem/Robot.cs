@@ -39,7 +39,6 @@ namespace SupermarketLockerSystem
                 }
                 catch (InvalidOperationException e)
                 {
-                    num++;
                 }
             }
             if (num > currentLockerNum) throw new InvalidOperationException();
