@@ -31,6 +31,16 @@ namespace SupermarketLockerSystemTest
             Assert.NotSame(firstTicket, secondTicket);
         } 
 
+        [Fact]
+        public void should_pick_bag_when_robot_uses_right_ticket()
+        {
+            var robot = new Robot();
+            var bag = new Bag();
+            Ticket ticket = robot.Store(bag);
+            var pickdBag = robot.Pick(ticket);
+
+            Assert.Same(bag,pickdBag);
+        }
     }
 
 
