@@ -56,6 +56,21 @@ namespace SupermarketLockerSystemTest
             Assert.Same(firstBag,firstPickdBag);
             Assert.Same(secondBag,secondPickdBag);
         }
+
+        [Fact]
+        public void should_circle_store_bag()
+        {
+            var robot = new Robot();
+            var firstBag = new Bag();
+            var secondBag = new Bag();
+            Ticket firstTicket = robot.Store(firstBag);
+            robot.Store(secondBag);
+            robot.Pick(firstTicket);
+            var thirdBag = new Bag();
+            Ticket thirdTicket = robot.Store(thirdBag);
+
+            Assert.NotNull(thirdTicket);
+        }
     }
 
 

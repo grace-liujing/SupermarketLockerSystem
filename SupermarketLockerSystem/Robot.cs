@@ -5,7 +5,7 @@ namespace SupermarketLockerSystem
 {
     public class Robot
     {
-        private static int _lockerCount = 10;
+        private static int _lockerCount = 2;
         private List<Locker> lockers;
         private static int currentLockerNum = 0;
 
@@ -21,16 +21,22 @@ namespace SupermarketLockerSystem
 
         public Ticket Store(Bag bag)
         {
-            var ticket = lockers[currentLockerNum].Store(bag);
-            currentLockerNum++;
-            return ticket;
+            for (var num = 0; num < _lockerCount; num++)
+            {
+                if (lockers[num].isEmpty)
+                {
+                    var ticket = lockers[num].Store(bag);
+                    return ticket;
+                }
+            }
+            throw new InvalidOperationException();
         }
 
         public Bag Pick(Ticket ticket)
         {
             int num;
             Bag bag = null;
-            for (num = 0; num <= currentLockerNum; num++)
+            for (num = 0; num <= _lockerCount; num++)
             {
                 try
                 {
@@ -41,7 +47,6 @@ namespace SupermarketLockerSystem
                 {
                 }
             }
-            if (num > currentLockerNum) throw new InvalidOperationException();
             return bag;
         }
     }

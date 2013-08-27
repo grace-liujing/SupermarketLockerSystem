@@ -5,12 +5,18 @@ namespace SupermarketLockerSystem
     public class Locker
     {
         private Tuple<Ticket, Bag> _storedBag;
+        public bool isEmpty { get; private set;}
+        public Locker()
+        {
+            isEmpty = true;
+        }
 
         public Ticket Store(Bag bag)
         {
             if (_storedBag != null) throw new InvalidOperationException();
             var ticket = new Ticket();
             _storedBag = new Tuple<Ticket, Bag>(ticket, bag);
+            isEmpty = false;
             return ticket;
         }
 
@@ -22,7 +28,10 @@ namespace SupermarketLockerSystem
             Ticket dispatchedTicket = _storedBag.Item1;
             if (dispatchedTicket.Equals(ticket))
             {
-                return _storedBag.Item2;
+                isEmpty = true;
+                Bag bag = _storedBag.Item2;
+                _storedBag = null;
+                return bag;
             }
 
             throw new InvalidOperationException();
