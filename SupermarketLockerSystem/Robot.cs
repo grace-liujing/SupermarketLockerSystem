@@ -14,7 +14,7 @@ namespace SupermarketLockerSystem
             lockers = new List<Locker>(_lockerCount);
             for (var num = 0; num < _lockerCount; num++)
             {
-                lockers.Add(new Locker());
+                lockers.Add(new Locker(1));
             }
 
         }
@@ -23,7 +23,7 @@ namespace SupermarketLockerSystem
         {
             for (var num = 0; num < _lockerCount; num++)
             {
-                if (lockers[num].isEmpty)
+                if (lockers[num].IsEmpty)
                 {
                     var ticket = lockers[num].Store(bag);
                     return ticket;

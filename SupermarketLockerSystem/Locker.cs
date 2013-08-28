@@ -1,36 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SupermarketLockerSystem
 {
     public class Locker
     {
-        private Tuple<Ticket, Bag> _storedBag;
-        public bool isEmpty { get; private set;}
-        public Locker()
+        private Dictionary<Ticket, Bag> storedBagMap; 
+        public bool IsEmpty { get; private set;}
+        private int Capacity { get; set; }
+
+        public Locker(int boxCount)
         {
-            isEmpty = true;
+            Capacity = boxCount;
+            IsEmpty = true;
         }
 
         public Ticket Store(Bag bag)
         {
-            if (_storedBag != null) throw new InvalidOperationException();
             var ticket = new Ticket();
-            _storedBag = new Tuple<Ticket, Bag>(ticket, bag);
-            isEmpty = false;
+            IsEmpty = false;
             return ticket;
         }
 
         public Bag Pick(Ticket ticket)
         {
             if (ticket == null) throw new ArgumentNullException();
-            if (_storedBag == null) throw new InvalidOperationException();
             
-            Ticket dispatchedTicket = _storedBag.Item1;
-            if (dispatchedTicket.Equals(ticket))
+            Bag bag = storedBagMap[ticket];
+            if (bag!=null)
             {
-                isEmpty = true;
-                Bag bag = _storedBag.Item2;
-                _storedBag = null;
+                IsEmpty = true;
+                storedBagMap.Remove(ticket);
                 return bag;
             }
 
