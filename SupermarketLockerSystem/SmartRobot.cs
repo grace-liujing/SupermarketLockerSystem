@@ -6,23 +6,21 @@ namespace SupermarketLockerSystem
     public class SmartRobot
     {
         private static int lockerCount;
-        private readonly List<Locker> lockers;
+        public readonly List<Locker> Lockers;
 
         public SmartRobot(List<Locker> lockerList)
         {
             lockerCount = lockerList.Count;
-            lockers = lockerList;
+            Lockers = lockerList;
         }
 
         public Ticket Store(Bag bag)
         {
-            for (var num = 0; num < lockerCount; num++)
+            var num = GetMostVacancyLocerNum();
+            if (Lockers[num].IsAvailable())
             {
-                if (lockers[num].IsAvailable())
-                {
-                    var ticket = lockers[num].Store(bag);
-                    return ticket;
-                }
+                var ticket = Lockers[num].Store(bag);
+                return ticket;
             }
             throw new InvalidOperationException();
         }
@@ -35,7 +33,7 @@ namespace SupermarketLockerSystem
             {
                 try
                 {
-                    bag = lockers[num].Pick(ticket);
+                    bag = Lockers[num].Pick(ticket);
                     break;
                 }
                 catch (InvalidOperationException e)
@@ -43,6 +41,21 @@ namespace SupermarketLockerSystem
                 }
             }
             return bag;
+        }
+
+        private int GetMostVacancyLocerNum()
+        {
+            var availableCount = 0;
+            var tempLockerNum = 0;
+            for (var num = 0; num < lockerCount; num++)
+            {
+                if (Lockers[num].AvailableCount > availableCount)
+                {
+                    availableCount = Lockers[num].AvailableCount;
+                    tempLockerNum = num;
+                }
+            }
+            return tempLockerNum;
         }
     }
 }

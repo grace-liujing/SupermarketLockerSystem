@@ -7,7 +7,7 @@ namespace SupermarketLockerSystem
     {
         private readonly Dictionary<Ticket, Bag> storedBagMap;
         public int Capacity { get; set; }
-        private int AvailableCount { get; set; }
+        public int AvailableCount { get; private set; }
 
         public Locker(int boxCount)
         {
