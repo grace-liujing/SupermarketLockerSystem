@@ -5,25 +5,20 @@ namespace SupermarketLockerSystem
 {
     public class Robot
     {
-        private static int _lockerCount = 2;
+        private static int _lockerCount;
         private List<Locker> lockers;
-        private static int currentLockerNum = 0;
 
-        public Robot()
+        public Robot(List<Locker> lockerList)
         {
-            lockers = new List<Locker>(_lockerCount);
-            for (var num = 0; num < _lockerCount; num++)
-            {
-                lockers.Add(new Locker(1));
-            }
-
+            _lockerCount = lockerList.Count;
+            lockers = lockerList;
         }
 
         public Ticket Store(Bag bag)
         {
             for (var num = 0; num < _lockerCount; num++)
             {
-                if (lockers[num].IsEmpty)
+                if (lockers[num].IsAvailable())
                 {
                     var ticket = lockers[num].Store(bag);
                     return ticket;

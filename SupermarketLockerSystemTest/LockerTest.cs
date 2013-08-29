@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SupermarketLockerSystem;
 using Xunit;
 
@@ -6,7 +7,7 @@ namespace SupermarketLockerSystemTest
 {
     public class LockerTest
     {
-        private readonly Locker locker = new Locker(4);
+        private readonly Locker locker = new Locker(2);
 
         [Fact]
         public void should_get_a_ticket_when_store_a_bag_into_locker()
@@ -19,15 +20,35 @@ namespace SupermarketLockerSystemTest
         [Fact]
         public void should_return_right_capacity_when_initialize()
         {
-            Assert.Equal(4, locker.Capacity);
+            Assert.Equal(2, locker.Capacity);
         }
 
         [Fact]
-        public void should_get_right_capacity_after_store_a_bag_into_locker()
+        public void should_be_available_when_initialize()
         {
-            var bag = new Bag();
-            locker.Store(bag);
-            Assert.Equal(3, locker.AvailableCount);
+            Assert.True(locker.IsAvailable());
+        }
+
+        [Fact]
+        public void should_be_unavailable_when_locker_is_full()
+        {
+            FillLockerToFullAndGetTickets();
+            Assert.False(locker.IsAvailable());
+        }
+
+        [Fact]
+        public void should_be_available_after_store_a_bag()
+        {
+            locker.Store(new Bag());
+            Assert.True(locker.IsAvailable());
+        }
+
+        [Fact]
+        public void should_be_available_after_pick_a_bag_from_full_locker()
+        {
+            var tickets = FillLockerToFullAndGetTickets();
+            locker.Pick(tickets[0]);
+            Assert.True(locker.IsAvailable());
         }
 
         [Fact]
@@ -43,11 +64,18 @@ namespace SupermarketLockerSystemTest
         [Fact]
         public void should_throw_exception_when_store_bag_if_locker_is_full()
         {
+            FillLockerToFullAndGetTickets();
+            Assert.Throws<InvalidOperationException>(() => locker.Store(new Bag()));
+        }
+
+        private List<Ticket> FillLockerToFullAndGetTickets()
+        {
+            var tickets = new List<Ticket>();
             for (int i = 0; i < locker.Capacity; i++)
             {
-                locker.Store(new Bag());
+                tickets.Add(locker.Store(new Bag()));
             }
-            Assert.Throws<InvalidOperationException>(() => locker.Store(new Bag()));
+            return tickets;
         }
 
         [Fact] 
@@ -103,5 +131,6 @@ namespace SupermarketLockerSystemTest
 
             Assert.Throws<InvalidOperationException>(() => locker.Pick(ticket));
         }
+
     }
 }
