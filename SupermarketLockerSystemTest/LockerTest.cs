@@ -18,6 +18,16 @@ namespace SupermarketLockerSystemTest
         }
 
         [Fact]
+        public void should_pick_the_bag_from_locker_when_use_right_ticket()
+        {
+            var bag = new Bag();
+            Ticket ticket = locker.Store(bag);
+            Bag pickBag = locker.Pick(ticket);
+
+            Assert.Equal(bag, pickBag);
+        }
+
+        [Fact]
         public void should_be_unavailable_when_locker_is_full()
         {
             FillLockerToFullAndGetTickets();
@@ -61,16 +71,6 @@ namespace SupermarketLockerSystemTest
         {
             Ticket ticket = locker.Store(null);
             Assert.NotNull(ticket);
-        }
-
-        [Fact]
-        public void should_pick_the_bag_from_locker_when_use_right_ticket()
-        {
-            var bag = new Bag();
-            Ticket ticket = locker.Store(bag);
-            Bag pickBag = locker.Pick(ticket);
-
-            Assert.Equal(bag,pickBag);
         }
 
         [Fact]

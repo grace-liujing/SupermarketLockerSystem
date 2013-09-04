@@ -4,11 +4,13 @@ using System.Linq;
 
 namespace SupermarketLockerSystem
 {
-    public class SmartRobot : Robot
+    public class SmartRobot : BaseRobot
     {
         public SmartRobot(List<Locker> lockerList):base(lockerList)
         {
+
         }
+
         public override Ticket Store(Bag bag)
         {
             var locker = Lockers.OrderByDescending(l => l.AvailableCount).FirstOrDefault();
