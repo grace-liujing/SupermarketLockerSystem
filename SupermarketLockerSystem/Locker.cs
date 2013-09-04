@@ -5,21 +5,24 @@ namespace SupermarketLockerSystem
 {
     public class Locker
     {
-        private readonly Dictionary<Ticket, Bag> storedBagMap;
-        public int Capacity { get; set; }
-        public int AvailableCount { get; private set; }
+        private readonly Dictionary<Ticket, Bag> storedBagMap = new Dictionary<Ticket, Bag>();
+        public int Capacity { get; private set; }
 
         public Locker(int boxCount)
         {
-            storedBagMap = new Dictionary<Ticket, Bag>();
             Capacity = boxCount;
-            AvailableCount = boxCount;
+        }
+
+        public int AvailableCount
+        {
+            get { return Capacity - storedBagMap.Count; }
         }
 
         public bool IsAvailable()
         {
-            return AvailableCount > 0;
+            return storedBagMap.Count < Capacity;
         }
+
         public Ticket Store(Bag bag)
         {
             if (!IsAvailable())
@@ -28,7 +31,6 @@ namespace SupermarketLockerSystem
             }
             var ticket = new Ticket();
             storedBagMap[ticket] = bag;
-            AvailableCount--;
             return ticket;
         }
 
@@ -41,7 +43,6 @@ namespace SupermarketLockerSystem
                 throw new InvalidOperationException();
             }
             Bag bag = storedBagMap[ticket];
-            AvailableCount++;
             storedBagMap.Remove(ticket);
             return bag;
         }

@@ -18,18 +18,6 @@ namespace SupermarketLockerSystemTest
         }
 
         [Fact]
-        public void should_return_right_capacity_when_initialize()
-        {
-            Assert.Equal(2, locker.Capacity);
-        }
-
-        [Fact]
-        public void should_be_available_when_initialize()
-        {
-            Assert.True(locker.IsAvailable());
-        }
-
-        [Fact]
         public void should_be_unavailable_when_locker_is_full()
         {
             FillLockerToFullAndGetTickets();
@@ -52,16 +40,6 @@ namespace SupermarketLockerSystemTest
         }
 
         [Fact]
-        public void should_return_ticket_when_store_another_bag_if_locker_has_available_box()
-        {
-            var bag = new Bag();
-            var anotherBag = new Bag();
-            locker.Store(bag);
-            Ticket ticket = locker.Store(anotherBag);
-            Assert.NotNull(ticket);
-        }
-
-        [Fact]
         public void should_throw_exception_when_store_bag_if_locker_is_full()
         {
             FillLockerToFullAndGetTickets();
@@ -71,7 +49,7 @@ namespace SupermarketLockerSystemTest
         private List<Ticket> FillLockerToFullAndGetTickets()
         {
             var tickets = new List<Ticket>();
-            for (int i = 0; i < locker.Capacity; i++)
+            for (var i = 0; i < locker.Capacity; i++)
             {
                 tickets.Add(locker.Store(new Bag()));
             }

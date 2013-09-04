@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using SupermarketLockerSystem;
 using Xunit;
 
@@ -13,27 +15,13 @@ namespace SupermarketLockerSystemTest
             });
 
         [Fact]
-        public void should_get_a_ticket_when_robot_fisrt_store_a_bag_in_locker()
+        public void should_get_a_ticket_when_robot_store_a_bag_in_locker()
         {
             var bag = new Bag();
             Ticket ticket = robot.Store(bag);
 
             Assert.NotNull(ticket);
         }
-        
-        [Fact]
-        public void should_get_two_different_tickets_when_robot_store_two_bags_in_locker()
-        {
-            var firstBag = new Bag();
-            var secondBag = new Bag();
-
-            Ticket firstTicket = robot.Store(firstBag);
-            Ticket secondTicket = robot.Store(secondBag);
-
-            Assert.NotNull(firstTicket);
-            Assert.NotNull(secondTicket);
-            Assert.NotSame(firstTicket, secondTicket);
-        } 
 
         [Fact]
         public void should_pick_bag_when_robot_uses_right_ticket()
@@ -42,47 +30,33 @@ namespace SupermarketLockerSystemTest
             Ticket ticket = robot.Store(bag);
             Bag pickdBag = robot.Pick(ticket);
 
-            Assert.Same(bag,pickdBag);
+            Assert.Same(bag, pickdBag);
         }
 
         [Fact]
-        public void should_pick_right_bag_with_different_right_tickets()
+        public void should_throw_exception_when_store_a_bag_if_all_lockers_are_full()
         {
-            var firstBag = new Bag();
-            var secondBag = new Bag();
-            Ticket firstTicket = robot.Store(firstBag);
-            Ticket secondTicket = robot.Store(secondBag);
-            Bag firstPickdBag = robot.Pick(firstTicket);
-            Bag secondPickdBag = robot.Pick(secondTicket);
-
-            Assert.Same(firstBag,firstPickdBag);
-            Assert.Same(secondBag,secondPickdBag);
+            Enumerable.Range(0, 3).ToList().ForEach(_ => robot.Store(new Bag()));
+            Assert.Throws<InvalidOperationException>(() => robot.Store(new Bag()));
         }
 
         [Fact]
-        public void should_store_bags_as_many_as_the_total_capacity()
+        public void should_be_invalid_when_pick_bag_use_wrong_ticket()
         {
-            for (int i = 0; i < 3; i++)
-            {
-                Ticket ticket = robot.Store(new Bag());
-                Assert.NotNull(ticket);
-            }
+            robot.Store(new Bag());
+
+            Assert.Throws<InvalidOperationException>(() => robot.Pick(new Ticket()));
+            Assert.Throws<ArgumentNullException>(() => robot.Pick(null));
         }
 
         [Fact]
-        public void should_store_by_circle_when_store_bag()
+        public void should_store_bag_in_order()
         {
-            var firstBag = new Bag();
-            var secondBag = new Bag();
-            var thirdBag = new Bag();
-            Ticket firstTicket = robot.Store(firstBag);
-            robot.Store(secondBag);
-            robot.Store(thirdBag);
-            robot.Pick(firstTicket);
-            var forthBag = new Bag();
-            Ticket thirdTicket = robot.Store(forthBag);
-
-            Assert.NotNull(thirdTicket);
+            var locker1 = new Locker(2);
+            var locker2 = new Locker(2);
+            var regularRobot = new Robot(new[] {locker1, locker2}.ToList());
+            regularRobot.Store(new Bag());
+            Assert.Equal(1, locker1.AvailableCount);
         }
     }
 

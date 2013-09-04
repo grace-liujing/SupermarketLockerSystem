@@ -1,48 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SupermarketLockerSystem
 {
     public class Robot
     {
-        private static int _lockerCount;
-        private List<Locker> lockers;
+        protected static int LockerCount;
+        protected readonly List<Locker> Lockers;
 
         public Robot(List<Locker> lockerList)
         {
-            _lockerCount = lockerList.Count;
-            lockers = lockerList;
+            LockerCount = lockerList.Count;
+            Lockers = lockerList;
         }
 
-        public Ticket Store(Bag bag)
+        public virtual Ticket Store(Bag bag)
         {
-            for (var num = 0; num < _lockerCount; num++)
+            var locker = Lockers.FirstOrDefault(l => l.IsAvailable());
+            if (locker == null)
             {
-                if (lockers[num].IsAvailable())
-                {
-                    var ticket = lockers[num].Store(bag);
-                    return ticket;
-                }
+                throw new InvalidOperationException();
             }
-            throw new InvalidOperationException();
+            var ticket = locker.Store(bag);
+            return ticket;
         }
 
         public Bag Pick(Ticket ticket)
         {
-            int num;
+            if(ticket == null) throw new ArgumentNullException();
             Bag bag = null;
-            for (num = 0; num <= _lockerCount; num++)
+            foreach (var locker in Lockers)
             {
-                try
-                {
-                    bag = lockers[num].Pick(ticket);
-                    break;
-                }
-                catch (InvalidOperationException e)
-                {
-                }
+                if (TryPick(locker, ticket, out bag)) break;
             }
+            if(bag == null) throw new InvalidOperationException();
             return bag;
+        }
+
+        private bool TryPick(Locker locker, Ticket ticket, out Bag bag)
+        {
+            try
+            {
+                bag = locker.Pick(ticket);
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                bag = null;
+                return false;
+            }
         }
     }
 }
