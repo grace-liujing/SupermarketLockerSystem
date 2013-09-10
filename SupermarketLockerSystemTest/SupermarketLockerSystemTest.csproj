@@ -43,6 +43,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Manager.cs" />
+    <Compile Include="ManagerTest.cs" />
+    <Compile Include="SuperRobotTest.cs" />
     <Compile Include="SmartRobotTest.cs" />
     <Compile Include="LockerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,6 +59,9 @@
       <Project>{1BF5D8CB-FD9E-4977-A320-0138F2805DF8}</Project>
       <Name>SupermarketLockerSystem</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

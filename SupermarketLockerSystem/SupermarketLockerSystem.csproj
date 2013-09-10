@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Bag.cs" />
     <Compile Include="BaseRobot.cs" />
+    <Compile Include="SuperRobot.cs" />
     <Compile Include="SmartRobot.cs" />
     <Compile Include="Locker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

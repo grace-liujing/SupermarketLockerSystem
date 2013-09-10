@@ -46,5 +46,10 @@ namespace SupermarketLockerSystem
             storedBagMap.Remove(ticket);
             return bag;
         }
+
+        public double VacancyRate()
+        {
+            return (double)(AvailableCount)/Capacity;
+        }
     }
 }

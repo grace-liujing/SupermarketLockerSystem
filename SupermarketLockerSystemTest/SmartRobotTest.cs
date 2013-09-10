@@ -7,21 +7,12 @@ namespace SupermarketLockerSystemTest
 {
     public class SmartRobotTest
     {
-        private readonly SmartRobot smartRobot;
-        private readonly Locker locker1;
-        private readonly Locker locker2;
-
-        public SmartRobotTest()
-        {
-            locker1 = new Locker(1);
-            locker2 = new Locker(2);
-            smartRobot = new SmartRobot(new List<Locker>() {locker1, locker2});
-        }
-
+        private  SmartRobot smartRobot;
 
         [Fact]
         public void should_get_a_ticket_when_smartrobot_store_a_bag_in_locker()
         {
+            smartRobot = new SmartRobot(new List<Locker>() { new Locker(1)});
             var bag = new Bag();
             Ticket ticket = smartRobot.Store(bag);
 
@@ -31,6 +22,9 @@ namespace SupermarketLockerSystemTest
         [Fact]
         public void should_store_bag_in_locker_which_has_more_capacity()
         {
+            var locker1 = new Locker(1);
+            var locker2 = new Locker(2);
+            smartRobot = new SmartRobot(new List<Locker>() { locker1, locker2 });
             smartRobot.Store(new Bag());
             Assert.Equal(1, locker2.AvailableCount);
         }
@@ -38,6 +32,7 @@ namespace SupermarketLockerSystemTest
         [Fact]
         public void should_throw_exception_when_store_a_bag_if_all_lockers_are_full()
         {
+            smartRobot = new SmartRobot(new List<Locker>() { new Locker(1), new Locker(2) });
             for (var i = 0; i < 3; i++)
             {
                 smartRobot.Store(new Bag());
