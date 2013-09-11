@@ -7,31 +7,48 @@ namespace SupermarketLockerSystemTest
 {
     public class Manager
     {
-        private static int LockerCount;
-        private readonly List<Locker> Lockers;
+        private readonly List<Locker> lockers;
+        private readonly List<BaseRobot> baseRobots; 
 
-        public Manager(List<Locker> lockerList)
+        public Manager(List<Locker> lockerList, List<BaseRobot> baseRobotList)
         {
-            LockerCount = lockerList.Count;
-            Lockers = lockerList;
+            lockers = lockerList;
+            baseRobots = baseRobotList;
         }
         public Ticket Store(Bag bag)
         {
-            var locker = Lockers.FirstOrDefault(l => l.IsAvailable());
-            if (locker == null)
+            Ticket ticket = null;
+            var locker = lockers.FirstOrDefault(l => l.IsAvailable());
+            if (locker != null)
             {
-                throw new InvalidOperationException();
+                ticket = locker.Store(bag);
+                return ticket;
             }
-            var ticket = locker.Store(bag);
+            foreach (var baseRobot in baseRobots)
+            {
+                try
+                {
+                    ticket=baseRobot.Store(bag);
+                    return ticket;
+                }
+                catch (Exception)
+                {
+
+                }
+            }
             return ticket;
         }
 
         public Bag Pick(Ticket ticket)
         {
             Bag bag = null;
-            foreach (var locker in Lockers)
+            foreach (var locker in lockers)
             {
                 if (TryPick(locker, ticket, out bag)) break;
+            }
+            foreach (var baseRobot in baseRobots)
+            {
+                baseRobot.Pick(ticket);
             }
             if (bag == null) throw new InvalidOperationException();
             return bag;
