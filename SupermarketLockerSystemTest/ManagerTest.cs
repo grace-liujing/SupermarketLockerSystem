@@ -35,16 +35,16 @@ namespace SupermarketLockerSystemTest
         [Fact]
         public void should_pick_bag_given_existing_ticket()
         {
-
+            var lockers = new List<Locker> { new Locker(1) };
             var robot = new Robot(new List<Locker> { new Locker(1) });
             var smartRobot = new SmartRobot(new List<Locker> { new Locker(1) });
             var superRobot = new SuperRobot(new List<Locker> { new Locker(1) });
-            var lockers = new List<Locker> { new Locker(1) };
             var baseRobots = new List<BaseRobot> { robot, smartRobot, superRobot };
             var manager = new Manager(lockers, baseRobots);
             var expectedBag = new Bag();
             var ticket = manager.Store(expectedBag);
             var actualBag = manager.Pick(ticket);
+
             Assert.Equal(expectedBag, actualBag);
         }
 
@@ -66,6 +66,7 @@ namespace SupermarketLockerSystemTest
             var ticket2 = manager.Store(bag2);
             var ticket3 = manager.Store(bag3);
             var ticket4 = manager.Store(bag4);
+
             Assert.Equal(bag1, locker.Pick(ticket1));
             Assert.Equal(bag2, robot.Pick(ticket2));
             Assert.Equal(bag3, smartRobot.Pick(ticket3));
